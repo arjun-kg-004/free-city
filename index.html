@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>City Life Open World</title>
+  <meta name="description" content="A browser-based open-world 3D city simulator: walk, drive, ride and explore a living city." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Crect x='12' y='26' width='10' height='26' fill='%23ffb547'/%3E%3Crect x='26' y='14' width='12' height='38' fill='%2338bdf8'/%3E%3Crect x='42' y='30' width='10' height='22' fill='%23ffb547'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Loading -->
+  <div id="loading" class="screen">
+    <div class="load-card">
+      <div class="logo"><span>CITY</span><span class="accent">LIFE</span></div>
+      <div class="load-sub">Open World</div>
+      <div class="load-bar"><div id="load-fill"></div></div>
+      <div id="load-text">Starting engines…</div>
+      <div id="load-tip" class="tip"></div>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div id="error" class="screen hidden">
+    <div class="panel narrow">
+      <h2>Something went wrong</h2>
+      <p id="error-text"></p>
+      <p class="muted">Try reloading the page. If it keeps happening, your browser may not support WebGL or WebAssembly.</p>
+      <button class="btn primary" onclick="location.reload()">Reload</button>
+    </div>
+  </div>
+
+  <!-- Main menu -->
+  <div id="main-menu" class="screen hidden">
+    <div class="menu-left">
+      <div class="logo big"><span>CITY</span><span class="accent">LIFE</span></div>
+      <div class="tagline">Walk. Drive. Ride. Explore a living city by the sea.</div>
+      <div class="menu-buttons">
+        <button class="btn primary" id="btn-continue">Continue</button>
+        <button class="btn" id="btn-new">New game</button>
+        <button class="btn" id="btn-settings">Settings</button>
+        <button class="btn" id="btn-controls">Controls</button>
+        <button class="btn ghost" id="btn-credits">Credits</button>
+      </div>
+      <div class="menu-foot">Three.js + Rapier · Real models by Sketchfab, Poly Haven &amp; Ready Player Me artists (see Credits)</div>
+    </div>
+  </div>
+
+  <!-- Pause -->
+  <div id="pause" class="screen dim hidden">
+    <div class="panel narrow">
+      <h2>Paused</h2>
+      <div class="menu-buttons">
+        <button class="btn primary" id="btn-resume">Resume</button>
+        <button class="btn" id="btn-map">City map</button>
+        <button class="btn" id="btn-journal">Journal &amp; missions</button>
+        <button class="btn" id="btn-garage">Garage</button>
+        <button class="btn" id="btn-abandon">Abandon mission</button>
+        <button class="btn" id="btn-respawn">Respawn at City Centre</button>
+        <button class="btn" id="btn-p-settings">Settings</button>
+        <button class="btn" id="btn-p-controls">Controls</button>
+        <button class="btn" id="btn-save">Save game</button>
+        <button class="btn ghost" id="btn-quit">Quit to main menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generic modal (settings, controls, shop, dealership, garage, journal, mission card) -->
+  <div id="modal" class="screen dim hidden">
+    <div class="panel" id="modal-panel">
+      <div class="panel-head">
+        <h2 id="modal-title"></h2>
+        <button class="close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Full map -->
+  <div id="map-overlay" class="screen dim hidden">
+    <div class="map-wrap">
+      <div class="panel-head">
+        <h2>City map</h2>
+        <span class="muted small">Click to set a GPS waypoint · right-click to clear</span>
+        <button class="close" id="map-close" aria-label="Close">✕</button>
+      </div>
+      <canvas id="map-canvas"></canvas>
+      <div class="legend">
+        <span><b style="color:#facc15">★</b> Mission</span><span><b style="color:#fde047">!</b> Local</span>
+        <span>⛽ Fuel</span><span>🚗 Dealer</span><span>🍛 Food</span><span>🛒 Shop</span><span>☕ Café</span>
+        <span><b style="color:#e879f9">◆</b> Landmark</span><span><b style="color:#60a5fa">▣</b> Your vehicle</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="hud-top-right" class="glass">
+      <div id="hud-money">$0</div>
+      <div class="row"><span id="hud-weather">☀</span><span id="hud-clock">09:00</span></div>
+      <div id="hud-district"></div>
+    </div>
+    <div id="hud-objective" class="glass hidden">
+      <div class="obj-title"></div>
+      <div class="obj-detail"></div>
+      <div class="obj-timer"></div>
+    </div>
+    <div id="hud-toasts"></div>
+    <div id="hud-banner" class="banner"></div>
+    <div id="minimap-wrap"><canvas id="minimap"></canvas></div>
+    <div id="hud-stamina" class="hidden"><div id="stamina-bar"></div></div>
+    <div id="hud-health" class="hidden"><div id="health-bar"></div></div>
+    <div id="hud-speedo" class="glass hidden">
+      <svg viewBox="0 0 120 120" class="gauge">
+        <path d="M 22 92 A 48 48 0 1 1 98 92" class="gauge-bg" />
+        <path id="speed-arc" d="M 22 92 A 48 48 0 1 1 98 92" class="gauge-fg" />
+      </svg>
+      <div class="speed-num"><span id="speed-value">0</span><span id="speed-unit">km/h</span></div>
+      <div id="veh-name"></div>
+      <div id="veh-gear"></div>
+      <div id="fuel-wrap"><span>⛽</span><div class="fuel-track"><div id="fuel-bar"></div></div></div>
+    </div>
+    <div id="hud-prompt" class="hidden"><kbd>E</kbd><span id="hud-prompt-text"></span></div>
+    <div id="hud-hint"></div>
+    <div id="hud-dialog" class="hidden"><div class="speaker"></div><div class="line"></div></div>
+    <div id="hud-fps" class="hidden"></div>
+    <button id="hud-menu-btn" class="glass" aria-label="Menu">☰</button>
+  </div>
+
+  <!-- Touch controls -->
+  <div id="touch" class="hidden">
+    <div id="joy-zone"><div id="joy-base"><div id="joy-knob"></div></div></div>
+    <div id="look-zone"></div>
+    <div id="touch-buttons">
+      <button data-act="interact" class="tb big">E</button>
+      <button data-act="jump" class="tb" id="tb-jump">⤒</button>
+      <button data-act="sprint" class="tb" id="tb-sprint">»</button>
+      <button data-act="camera" class="tb small">📷</button>
+      <button data-act="map" class="tb small">🗺</button>
+      <button data-act="horn" class="tb small veh">📯</button>
+      <button data-act="lights" class="tb small veh">💡</button>
+      <button data-act="garage" class="tb small foot">🚘</button>
+      <button data-act="attack" class="tb foot">👊</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

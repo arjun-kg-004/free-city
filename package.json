@@ -1,0 +1,21 @@
+{
+  "name": "city-life-game",
+  "version": "1.0.0",
+  "description": "Browser-based open-world 3D city simulator built with Three.js, Rapier and Vite",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:single": "vite build --mode single",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "0.14.0",
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.11",
+    "vite-plugin-singlefile": "2.0.3"
+  }
+}

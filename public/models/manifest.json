@@ -1,0 +1,104 @@
+{
+  "characters": {
+    "player": "readyplayer.me.glb",
+    "npcs": [
+      "readyplayer.me.glb"
+    ]
+  },
+  "animations": ["Xbot.glb", "fight-a.glb", "fight-b.glb", "fight-c.glb"],
+  "vehicles": {
+    "hatchback": {
+      "file": "jeep.glb",
+      "name": "Trail 4x4",
+      "desc": "Open-top off-roader. Doors off, sun in your face.",
+      "lod": "jeep.lod.glb"
+    },
+    "suv": {
+      "file": "range-rover.glb",
+      "name": "Luxe SUV",
+      "desc": "Big, quiet and very posh. Floats over bumps.",
+      "lod": "range-rover.lod.glb"
+    },
+    "sedan": {
+      "file": "supra.glb",
+      "name": "GT300 Coupe",
+      "desc": "Race-liveried coupe with a huge wing.",
+      "staticWheels": true,
+      "lod": "supra.lod.glb"
+    },
+    "sports": {
+      "file": "ferrari.glb",
+      "name": "Spider V8",
+      "desc": "Mid-engined Italian convertible. Blistering pace.",
+      "lod": "ferrari.lod.glb"
+    },
+    "motorcycle": {
+      "file": "yamaha.glb",
+      "name": "Street Triple 890",
+      "desc": "Naked roadster with a howling triple.",
+      "lod": "yamaha.lod.glb"
+    },
+    "sportbike": {
+      "file": "yamaha.glb",
+      "name": "Falcon SP",
+      "desc": "Sharper, faster tune of the naked triple.",
+      "lod": "yamaha.lod.glb"
+    },
+    "scooter": {
+      "file": "vino.glb",
+      "name": "Vino Scooter",
+      "desc": "Retro step-through scooter. Perfect for the promenade.",
+      "lod": "vino.lod.glb"
+    }
+  },
+  "traffic": [
+    {
+      "file": "range-rover.glb",
+      "shape": "suv",
+      "color": "#c9cbce",
+      "lod": "range-rover.lod.glb"
+    },
+    {
+      "file": "jeep.glb",
+      "shape": "suv",
+      "color": "#2a2b2d",
+      "lod": "jeep.lod.glb"
+    },
+    {
+      "file": "ferrari.glb",
+      "shape": "sports",
+      "lod": "ferrari.lod.glb"
+    },
+    {
+      "file": "supra.glb",
+      "shape": "sports",
+      "color": "#e9e9ea",
+      "lod": "supra.lod.glb"
+    },
+    {
+      "file": "huracan.glb",
+      "shape": "sports",
+      "color": "#151515",
+      "length": 4.7,
+      "lod": "huracan.lod.glb"
+    }
+  ],
+  "textures": {
+    "asphalt": {
+      "map": "tex/asphalt_diff.jpg",
+      "roughness": "tex/asphalt_rough.jpg",
+      "size": 5,
+      "tint": "#8a8a8a"
+    },
+    "grass": {
+      "map": "tex/grass_diff.jpg",
+      "normal": "tex/grass_nor.png",
+      "size": 2.5
+    }
+  },
+  "environment": {
+    "day": "tex/modern_buildings_2_1k.hdr",
+    "night": "tex/st_peters_square_night_1k.hdr",
+    "rotation": 0
+  }
+}
